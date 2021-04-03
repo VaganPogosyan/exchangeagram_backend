@@ -1,8 +1,9 @@
 // run MySQL in terminal === /usr/local/mysql/bin/mysql -u root -p
 
-const bodyParser = require('body-parser');
 const express = require('express');
 const mysql = require('mysql');
+const cors = require('cors');
+// const bodyParser = require('body-parser');
 // const apiRouter = require('./routes/index')
 
 // Configuration for connection to MySQL
@@ -15,10 +16,12 @@ const db = mysql.createConnection({
 });
 
 const APP = express();
-const PORT = 3000;
+const PORT = 8080;
 
 // APP.use('/api/exchangeagram', apiRouter)
+APP.use(cors());
 APP.use(express.json());
+// APP.use(bodyParser.urlencoded({ extended: true }));
 
 // Connect to MySQL (throw an error if there is one, if not console.log)
 db.connect((err) => {
@@ -49,29 +52,33 @@ APP.get('/createpoststable', (req, res) => {
 });
 
 
-// CRUD ROUTES
+// ================ CRUD ROUTES ===================
 
 // insert post route
-APP.post('/api/exchangeagram', (req, res) => {
-    let sql = 'INSERT INTO posts (caption, image) VALUES ?';
-    let values = [
-        ['new day new challenges', 'selfie in the mirror'],
-        ['beast mode', 'selfie from gym'],
-        ['make America great again', 'photo from capitol'],
-        ['getting chipped', 'photo vaccination'],
-        ['hbd Diana', 'grumpy cat in a clown hat']
-    ];
-    db.query(sql, [values], (err, result) => {
+APP.post('/api/insert', (req, res) => {
+
+    const caption = req.body.caption;
+    const image = req.body.image;
+
+    // const caption = 'hello';
+    // const image = 'image hello';
+
+    let sql = 'INSERT INTO posts (caption, image) VALUES (?, ?)';
+    db.query(sql, [caption, image], (err, result) => {
         if (err) throw err;
         console.log(result);
-        console.log("Number of records inserted: " + result.affectedRows);
-        res.send(result);
+        console.log(err)
+        // console.log("Number of records inserted: " + result.affectedRows);
+        // res.send(result);
     });
 });
 
+
+
+
 // update route
 APP.put('/api/exchangeagram/:id', (req, res) => {
-    // let sql = 'UPDATE posts SET caption = ? WHERE post_id = ?';
+    let sql = 'UPDATE posts SET caption = ? WHERE post_id = ?';
     // let values = ['old caption', req.params.id];
     db.query(`UPDATE posts SET caption = 'old caption' WHERE post_id = ${req.params.id}`, (err, result) => {
         if (err) throw err;
