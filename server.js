@@ -69,10 +69,13 @@ APP.post('/api/exchangeagram/newpost', (req, res) => {
 });
 
 // update route
-APP.put('/api/exchangeagram/:id', (req, res) => {
+APP.put('/api/exchangeagram/update/:id', (req, res) => {
     let sql = 'UPDATE posts SET caption = ? WHERE post_id = ?';
     // let values = ['old caption', req.params.id];
-    db.query(`UPDATE posts SET caption = 'old caption' WHERE post_id = ${req.params.id}`, (err, result) => {
+    const caption = req.body.caption;
+    // const image = req.body.image;
+    const post_id = req.params.id;
+    db.query(sql, [caption, post_id], (err, result) => {
         if (err) throw err;
         console.log(result);
         // console.log("Number of records inserted: " + result.affectedRows);
