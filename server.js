@@ -55,14 +55,9 @@ APP.get('/createpoststable', (req, res) => {
 // ================ CRUD ROUTES ===================
 
 // insert post route
-APP.post('/api/insert', (req, res) => {
-
+APP.post('/api/exchangeagram/newpost', (req, res) => {
     const caption = req.body.caption;
     const image = req.body.image;
-
-    // const caption = 'hello';
-    // const image = 'image hello';
-
     let sql = 'INSERT INTO posts (caption, image) VALUES (?, ?)';
     db.query(sql, [caption, image], (err, result) => {
         if (err) throw err;
@@ -72,9 +67,6 @@ APP.post('/api/insert', (req, res) => {
         // res.send(result);
     });
 });
-
-
-
 
 // update route
 APP.put('/api/exchangeagram/:id', (req, res) => {
@@ -89,11 +81,11 @@ APP.put('/api/exchangeagram/:id', (req, res) => {
 });
 
 // get index route
-APP.get('/api/exchangeagram', (req, res) => {
+APP.get('/api/exchangeagram/posts', (req, res) => {
     let sql = 'SELECT * FROM posts'
     db.query(sql, (err, result) => {
         if (err) throw err;
-        console.log(result);
+        // console.log(result);
         res.send(result);
     })
 });
